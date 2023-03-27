@@ -27,7 +27,9 @@ int main()
     // get start time
     start_time = omp_get_wtime();
 
-    // matrix multiplication
+    // matrix multiplication : here we used (parallel to create multiple threads ,
+    //and we used for to discompose those for loops into multiple of threads )
+    
 #pragma omp parallel for collapse(2)
     for (int i = 0; i < ROW; i++)
     {
@@ -35,7 +37,7 @@ int main()
         {
             int sum = 0;
 #pragma omp parallel for reduction(+ \
-                                   : sum)
+                                   : sum)  //reduction to perform an addition from different threads and place it in (sum))
             for (int k = 0; k < ROW; k++)
             {
                 sum += matrix1[i][k] * matrix2[k][j];
@@ -47,7 +49,7 @@ int main()
     // get end time
     end_time = omp_get_wtime();
 
-    // calculate time difference
+    // final time 
     double execution_time = end_time - start_time;
 
     printf("Execution time: %.6f seconds\n", execution_time);
